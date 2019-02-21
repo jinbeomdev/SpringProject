@@ -3,30 +3,38 @@ package com.wrapsody.demo;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Data
 @Entity
 public class History {
     @Id
     @GeneratedValue
     private Long historyId;
 
-    @Column
+    @Column(unique = true)
     private String historyMasterName;
 
     @Column
     private String historyFreeSetName;
 
-    @OneToMany
-    @JoinColumn
-    private List<HistoryTag> tags = new ArrayList<HistoryTag>();
+    @Column
+    @OneToMany(targetEntity = HistoryTag.class, mappedBy = "history", fetch = FetchType.EAGER)
+    private Set<HistoryTag> tags = new HashSet<HistoryTag>();
 
-    @OneToMany
-    @JoinColumn
-    private List<HistoryAuth> auths = new ArrayList<HistoryAuth>();
+    @Column
+    @OneToMany(targetEntity = HistoryAuth.class, mappedBy = "history", fetch = FetchType.EAGER)
+    private Set<HistoryAuth> auths = new HashSet<HistoryAuth>();
+
+    public Set<HistoryTag> getTags() {
+        return tags;
+    }
+
+    public Set<HistoryAuth> getAuths() {
+        return auths;
+    }
 
     @Builder
     History(String historyMasterName, String historyFreeSetName) {

@@ -1,26 +1,26 @@
 package com.wrapsody.demo;
 
-import lombok.AccessLevel;
-import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Data
 @Entity
 public class HistoryTag {
-    @Id
-    @GeneratedValue
-    private Long historyTagId;
+    @EmbeddedId
+    private HistoryTagId history;
 
-    @Column
+    @Column(unique = true)
     private String historyTagName;
 
-    @Builder
-    HistoryTag(String historyTagName) {
-        this.historyTagName = historyTagName;
+    @Data
+    @Embeddable
+    public class HistoryTagId implements  Serializable {
+        @ManyToOne
+        @JoinColumn
+        History history;
     }
 }

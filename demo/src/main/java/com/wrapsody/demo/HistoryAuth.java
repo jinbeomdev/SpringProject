@@ -1,26 +1,29 @@
 package com.wrapsody.demo;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Data
 @Entity
 public class HistoryAuth {
-    @Id
-    @GeneratedValue
-    private Long historyAuthId;
+    enum AuthType { REVISION, READ }
+
+    @EmbeddedId
+    private HistoryAuthId history;
+
+    @Column(unique = true)
+    private String historyAuthName;
 
     @Column
-    private  String historyAuthName;
+    private AuthType historyAuthType;
 
-    @Builder
-    HistoryAuth(String historyAuthName) {
-        this.historyAuthName = historyAuthName;
+    @Data
+    @Embeddable
+    public class HistoryAuthId implements Serializable {
+        @ManyToOne
+        @JoinColumn
+        private History history;
     }
 }
