@@ -3,42 +3,27 @@ package com.wrapsody.demo;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 @Entity
-public class History {
+public class History extends Audit{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long historyId;
 
+    @NotNull
     @Column(unique = true)
     private String historyMasterName;
 
+    @NotNull
     @Column
-    private String historyFreeSetName;
-
-    @Column
-    @OneToMany(targetEntity = HistoryTag.class, mappedBy = "history", fetch = FetchType.EAGER)
-    private Set<HistoryTag> tags = new HashSet<HistoryTag>();
-
-    @Column
-    @OneToMany(targetEntity = HistoryAuth.class, mappedBy = "history", fetch = FetchType.EAGER)
-    private Set<HistoryAuth> auths = new HashSet<HistoryAuth>();
-
-    public Set<HistoryTag> getTags() {
-        return tags;
-    }
-
-    public Set<HistoryAuth> getAuths() {
-        return auths;
-    }
+    private String historyPreSetName;
 
     @Builder
-    History(String historyMasterName, String historyFreeSetName) {
+    History(String historyMasterName, String historyPreSetName) {
         this.historyMasterName = historyMasterName;
-        this.historyFreeSetName = historyFreeSetName;
+        this.historyPreSetName = historyPreSetName;
     }
 }

@@ -1,29 +1,35 @@
 package com.wrapsody.demo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 @Entity
 public class HistoryAuth {
-    enum AuthType { REVISION, READ }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long historyAuthId;
 
-    @EmbeddedId
-    private HistoryAuthId history;
-
+    @NotNull
     @Column(unique = true)
     private String historyAuthName;
 
+    @NotNull
     @Column
-    private AuthType historyAuthType;
+    private Boolean historyAuthType;
 
-    @Data
-    @Embeddable
-    public class HistoryAuthId implements Serializable {
-        @ManyToOne
-        @JoinColumn
-        private History history;
-    }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "history_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private History history;
 }
