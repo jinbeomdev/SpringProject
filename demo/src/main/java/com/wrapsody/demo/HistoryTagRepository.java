@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HistoryTagRepository extends JpaRepository<HistoryTag, Long> {
-    Page<HistoryTag> findByHistory(Long history, Pageable pageable);
-
+    Page<HistoryTag> findByHistoryHistoryId(Long historyId, Pageable pageable);
 }

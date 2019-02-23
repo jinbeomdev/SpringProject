@@ -20,7 +20,7 @@ public class HIstoryAuthController {
     @GetMapping("/history/{historyId}/auth")
     Page<HistoryAuth> getAllHistoryAuthByHistoryId(@PathVariable (value = "historyId") Long historyId,
                                                    Pageable pageable) {
-        return historyAuthRepository.findByHistory(historyId, pageable);
+        return historyAuthRepository.findByHistoryHistoryId(historyId, pageable);
     }
 
     @PostMapping("/history/{historyId}/auth")

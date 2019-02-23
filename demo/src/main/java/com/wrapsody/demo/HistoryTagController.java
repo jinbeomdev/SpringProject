@@ -19,7 +19,7 @@ public class HistoryTagController {
     @GetMapping("/history/{historyId}/tag")
     public Page<HistoryTag> getAllHistoryTagByHistroyId(@PathVariable (value =  "historyId") Long historyId,
                                                         Pageable pageable) {
-        return historyTagRepository.findByHistory(historyId, pageable);
+        return historyTagRepository.findByHistoryHistoryId(historyId, pageable);
     }
 
     @PostMapping("/history/{historyId}/tag")
