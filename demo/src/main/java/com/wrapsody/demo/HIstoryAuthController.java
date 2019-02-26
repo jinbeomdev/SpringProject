@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class HIstoryAuthController {
@@ -18,16 +19,14 @@ public class HIstoryAuthController {
     }
 
     @GetMapping("/history/{historyId}/auth")
-    Page<HistoryAuth> getAllHistoryAuthByHistoryId(@PathVariable (value = "historyId") Long historyId,
-                                                   Pageable pageable) {
-        return historyAuthRepository.findByHistoryHistoryId(historyId, pageable);
+    List<HistoryAuth> getAllHistoryAuthByHistoryId(@PathVariable (value = "historyId") Long historyId) {
+        return historyAuthRepository.findByHistoryHistoryId(historyId);
     }
 
     @PostMapping("/history/{historyId}/auth")
     HistoryAuth createHIstoryAuth(@PathVariable (value = "historyId") Long historyId,
-                                  @Valid @RequestBody HistoryAuth historyAuth) {
+                                  @Valid @RequestBody RequestCreateHistoryAuthDto requestCreateHistoryAuthDto) {
         History history = historyRepository.findById(historyId).get();
-        historyAuth.setHistory(history);
-        return historyAuthRepository.save(historyAuth);
+        return requestCreateHistoryAuthDto.toEntity(history);
     }
 }

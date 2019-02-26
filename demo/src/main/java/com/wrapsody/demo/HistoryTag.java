@@ -3,6 +3,7 @@ package com.wrapsody.demo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +22,7 @@ public class HistoryTag {
     private Long historyTagId;
 
     @NotNull
-    @Column(unique = true)
+    @Column
     private String historyTagName;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -29,4 +30,10 @@ public class HistoryTag {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private History history;
+
+    @Builder
+    HistoryTag(String historyTagName, History history) {
+        this.historyTagName = historyTagName;
+        this.history = history;
+    }
 }

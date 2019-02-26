@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class HistoryTagController {
@@ -17,16 +18,20 @@ public class HistoryTagController {
     }
 
     @GetMapping("/history/{historyId}/tag")
-    public Page<HistoryTag> getAllHistoryTagByHistroyId(@PathVariable (value =  "historyId") Long historyId,
-                                                        Pageable pageable) {
-        return historyTagRepository.findByHistoryHistoryId(historyId, pageable);
+    public List<HistoryTag> getAllHistoryTagByHistroyId(@PathVariable (value =  "historyId") Long historyId) {
+        return historyTagRepository.findByHistoryHistoryId(historyId);
     }
 
     @PostMapping("/history/{historyId}/tag")
     public HistoryTag createHistoryTag(@PathVariable (value = "historyId") Long historyId,
-                                       @Valid @RequestBody HistoryTag historyTag) {
+                                       @Valid @RequestBody RequestCreateHistoryTagDto createHistoryTagDto) {
         History history = historyRepository.findById(historyId).get();
-        historyTag.setHistory(history);
-        return historyTagRepository.save(historyTag);
+        return historyTagRepository.save(createHistoryTagDto.toEntity(history));
+    }
+
+    @PostMapping("history/{historyId}/tags")
+    public List<HistoryTag> createHistoryTags(@PathVariable (value = "historyId") Long historyId,
+                                              @Valid @RequestBody RequestCreateHistoryTagsDto createHistoryTagsDto) {
+        return historyTagRepository.saveAll(createHistoryTagsDto.toEntity());
     }
 }

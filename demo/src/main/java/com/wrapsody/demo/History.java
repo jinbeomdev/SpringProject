@@ -1,5 +1,6 @@
 package com.wrapsody.demo;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,16 +15,23 @@ public class History extends Audit{
     private Long historyId;
 
     @NotNull
-    @Column(unique = true)
+    @Column
     private String historyMasterName;
 
     @NotNull
     @Column
     private String historyPreSetName;
 
+    @NotNull
+    @Column
+    private Boolean historyIsDeleted;
+
     @Builder
-    History(String historyMasterName, String historyPreSetName) {
+    History(String historyMasterName,
+            String historyPreSetName,
+            Boolean historyIsDeleted) {
         this.historyMasterName = historyMasterName;
         this.historyPreSetName = historyPreSetName;
+        this.historyIsDeleted = historyIsDeleted;
     }
 }

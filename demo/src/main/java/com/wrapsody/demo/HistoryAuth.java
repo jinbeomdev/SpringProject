@@ -2,6 +2,7 @@ package com.wrapsody.demo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,7 @@ public class HistoryAuth {
     private Long historyAuthId;
 
     @NotNull
-    @Column(unique = true)
+    @Column
     private String historyAuthName;
 
     @NotNull
@@ -32,4 +33,11 @@ public class HistoryAuth {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private History history;
+
+    @Builder
+    HistoryAuth(String historyAuthName, Boolean historyAuthType, History history) {
+        this.historyAuthName = historyAuthName;
+        this.historyAuthType = historyAuthType;
+        this.history = history;
+    }
 }
