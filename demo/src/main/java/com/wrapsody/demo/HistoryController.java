@@ -50,8 +50,10 @@ public class HistoryController {
     }
 
     @PostMapping("history/test")
-    public History createHistoryTest(@Valid @RequestBody RequestCreateHistoryDto createHistoryDto) {
-        log.info(createHistoryDto.toString());
+    public History createHistoryTest(@Valid @RequestBody RequestCreateHistoryDto createHistoryDto,
+                                     @RequestParam String userId,
+                                     @RequestParam String syncId) {
+        /*TODO : wrapsody와 통신을 통해 해당 문서에 tag들과 auth를 등록 */
         History history = createHistoryDto.toHistoryEntity();
         history = historyRepository.save(history);
         tagRepository.saveAll(createHistoryDto.toHistoryTagEntity(history));
