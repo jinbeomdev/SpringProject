@@ -19,11 +19,20 @@ import javax.validation.constraints.NotNull;
 public class HistoryTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long historyTagId;
+    @JsonIgnore
+    private Long id;
+
+    @Column
+    private String historyTagCode;
 
     @NotNull
     @Column
     private String historyTagName;
+
+    @NotNull
+    @Column
+    @Enumerated(EnumType.STRING)
+    private HistoryTagType historyTagType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "history_id", nullable = false)
@@ -32,8 +41,13 @@ public class HistoryTag {
     private History history;
 
     @Builder
-    HistoryTag(String historyTagName, History history) {
+    HistoryTag(String historyTagCode,
+               String historyTagName,
+               HistoryTagType historyTagType,
+               History history) {
+        this.historyTagCode = historyTagCode;
         this.historyTagName = historyTagName;
+        this.historyTagType = historyTagType;
         this.history = history;
     }
 }

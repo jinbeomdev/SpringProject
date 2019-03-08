@@ -8,11 +8,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RequestCreateHistoryTagDto {
+    private String historyTagCode;
     private String historyTagName;
+    private HistoryTagType historyTagType;
 
     HistoryTag toEntity(History history) {
         return HistoryTag.builder()
+                .historyTagCode(historyTagCode)
                 .historyTagName(historyTagName)
+                .historyTagType(historyTagType)
+                .history(history)
                 .build();
     }
 }

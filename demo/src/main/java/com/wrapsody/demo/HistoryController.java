@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -26,38 +27,59 @@ public class HistoryController {
         this.authRepository = authRepository;
     }
 
-    @GetMapping("/history/test")
-    public Page<ResponseAllHistoryDto> getAllHistory() {
+    @GetMapping("/history")
+    public Page<ResponseAllHistoryDto> getAllHistory(@RequestParam String userId) {
         Pageable pageable = PageRequest.of(0, 20, Sort.by("createdAt"));
-        Page<History> histories = historyRepository.findAll(pageable);
+        Page<History> histories = historyRepository.findByHistoryMasterIdAndHistoryIsDeleted(userId, false, pageable);
         return histories.map(history -> {
-            List<HistoryTag> tags = tagRepository.findByHistoryHistoryId(history.getHistoryId());
-            List<HistoryAuth> auths = authRepository.findByHistoryHistoryId(history.getHistoryId());
+            List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
+            List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
             ResponseAllHistoryDto responseAllHistoryDto = new ResponseAllHistoryDto(history, tags, auths);
             return responseAllHistoryDto;
         });
     }
 
-    @GetMapping("/history")
-    public Page<History> getAllHistory(Pageable pageable) {
-        return historyRepository.findAll(pageable);
+    @GetMapping("/history/test")
+    public List<ResponseAllHistoryDto> getTop20History(@RequestParam (value = "userId") String userId) {
+        List<History> histories = historyRepository.findTop20ByHistoryMasterIdAndHistoryIsDeletedOrderByCreatedAtDesc(userId, false);
+        return histories.stream().map(history -> {
+            List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
+            List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
+            ResponseAllHistoryDto responseAllHistoryDto = new ResponseAllHistoryDto(history, tags, auths);
+            return responseAllHistoryDto;
+        }).collect(Collectors.toList());
     }
-
 
     @PostMapping("history")
-    public History createHistory(@Valid @RequestBody RequestCreateHistoryDto createHistoryDto) {
-        return historyRepository.save(createHistoryDto.toEntity());
-    }
-
-    @PostMapping("history/test")
     public History createHistoryTest(@Valid @RequestBody RequestCreateHistoryDto createHistoryDto,
-                                     @RequestParam String userId,
                                      @RequestParam String syncId) {
-        /*TODO : wrapsody와 통신을 통해 해당 문서에 tag들과 auth를 등록 */
-        History history = createHistoryDto.toHistoryEntity();
-        history = historyRepository.save(history);
+        RequestWrapsodySetTag requestWrapsodySetTag = new RequestWrapsodySetTag(syncId, createHistoryDto.getTagsAsString());
+        RequestWrapsodySetAuth requestWrapsodySetAuth = new RequestWrapsodySetAuth(syncId,
+                createHistoryDto.getMasterIdAsXml(),
+                createHistoryDto.getCheckoutUserIdsAsXml(),
+                createHistoryDto.getCheckoutDeptCodesAsXml(),
+                createHistoryDto.getHistoryViewAuthAllUsers(),
+                createHistoryDto.getViewUserIdsAsXml(),
+                createHistoryDto.getViewDeptCodes());
+
+        log.info(requestWrapsodySetTag.addTags());
+        log.info(requestWrapsodySetAuth.addAuths());
+
+    History history = createHistoryDto.toHistoryEntity();
+
+    history = historyRepository.save(history);
         tagRepository.saveAll(createHistoryDto.toHistoryTagEntity(history));
         authRepository.saveAll(createHistoryDto.toHistoryAuthEntity(history));
+
         return history;
+}
+
+    @DeleteMapping("/history/{historyId}")
+    public Boolean deletedHistory(@PathVariable(value = "historyId") Long historyId) {
+         return historyRepository.findById(historyId).map(history -> {
+            history.setHistoryIsDeleted(true);
+            historyRepository.save(history);
+            return true;
+        }).orElse(false);
     }
 }

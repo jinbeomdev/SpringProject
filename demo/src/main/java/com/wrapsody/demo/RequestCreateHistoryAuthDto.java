@@ -4,17 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @AllArgsConstructor
 @Getter
 @Setter
 public class RequestCreateHistoryAuthDto {
+    private String historyAuthId;
     private String historyAuthName;
-    private Boolean historyAuthType;
+    private HistoryAuthType historyAuthType;
 
     HistoryAuth toEntity(History history) {
         return HistoryAuth.builder()
+                .historyAuthId(historyAuthId)
                 .historyAuthName(historyAuthName)
                 .historyAuthType(historyAuthType)
                 .history(history)

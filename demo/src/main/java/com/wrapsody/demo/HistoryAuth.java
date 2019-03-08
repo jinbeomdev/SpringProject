@@ -18,7 +18,12 @@ import javax.validation.constraints.NotNull;
 public class HistoryAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long historyAuthId;
+    @JsonIgnore
+    private Long id;
+
+    @NotNull
+    @Column
+    private String historyAuthId;
 
     @NotNull
     @Column
@@ -26,7 +31,8 @@ public class HistoryAuth {
 
     @NotNull
     @Column
-    private Boolean historyAuthType;
+    @Enumerated(EnumType.STRING)
+    private HistoryAuthType historyAuthType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "history_id", nullable = false)
@@ -35,7 +41,11 @@ public class HistoryAuth {
     private History history;
 
     @Builder
-    HistoryAuth(String historyAuthName, Boolean historyAuthType, History history) {
+    HistoryAuth(String historyAuthId,
+                String historyAuthName,
+                HistoryAuthType historyAuthType,
+                History history) {
+        this.historyAuthId = historyAuthId;
         this.historyAuthName = historyAuthName;
         this.historyAuthType = historyAuthType;
         this.history = history;

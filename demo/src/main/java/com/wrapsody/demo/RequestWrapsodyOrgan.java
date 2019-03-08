@@ -1,29 +1,28 @@
 package com.wrapsody.demo;
 
+import org.springframework.http.HttpEntity;
 import org.springframework.util.Base64Utils;
+import org.springframework.web.util.UriUtils;
+
+import java.nio.charset.Charset;
 
 public class RequestWrapsodyOrgan extends RequestWrapsody {
-    private final String uri = "";
-    private String userId;
-    private String requestMsg;
+    public RequestWrapsodyOrgan(String uuid, String userId) {
+        super("GETORGAN");
+        this.getMap().add("MSG", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<getorgan_request>\n" +
+                "   <uuid>" + uuid + "</uuid>\n" +
+                "   <userId>" + Base64Utils.encodeToString(userId.getBytes()) + "</userId>\n" +
+                "</getorgan_request>");
 
-    public RequestWrapsodyOrgan(String userId) {
-        this("", userId);
-    }
-
-    public RequestWrapsodyOrgan(String responseType, String userId) {
-        super("GETORGAN", responseType);
-
-        this.userId = userId;
-        this.requestMsg = "<?xml version=1.0 encoding=UTF-8?>" +
-                "<getorgan_request>" +
-                "<uuid></uuid>" +
-                "<userId>" + Base64Utils.encodeToString(userId.getBytes()) + "</userId>" +
-                "</getorgan_request>";
+        this.setRequest(new HttpEntity(getMap(), getHttpHeaders()));
+        this.setResponse(this.getRestTemplate().postForEntity(URI, this.getRequest(), String.class));
     }
 
     public String getOrgan() {
-        /*TODO : requestMSG을 암호화 */
-        return getRestTemplateTest().postForObject(this.getServerUri() + uri, requestMsg, String.class);
+        String json = getResponse().getBody();
+        json = json.substring(json.indexOf("MSG=") + 4);
+
+        return UriUtils.decode(json, Charset.defaultCharset());
     }
 }

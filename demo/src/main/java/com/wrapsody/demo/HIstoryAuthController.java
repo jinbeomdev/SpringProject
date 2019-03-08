@@ -1,7 +1,5 @@
 package com.wrapsody.demo;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,7 +18,7 @@ public class HIstoryAuthController {
 
     @GetMapping("/history/{historyId}/auth")
     List<HistoryAuth> getAllHistoryAuthByHistoryId(@PathVariable (value = "historyId") Long historyId) {
-        return historyAuthRepository.findByHistoryHistoryId(historyId);
+        return historyAuthRepository.findByHistoryId(historyId);
     }
 
     @PostMapping("/history/{historyId}/auth")

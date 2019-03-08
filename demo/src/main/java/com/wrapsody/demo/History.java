@@ -1,6 +1,6 @@
 package com.wrapsody.demo;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +12,11 @@ import javax.validation.constraints.NotNull;
 public class History extends Audit{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long historyId;
+    private Long id;
+
+    @NotNull
+    @Column
+    private String historyMasterId;
 
     @NotNull
     @Column
@@ -24,14 +28,24 @@ public class History extends Audit{
 
     @NotNull
     @Column
+    private Boolean historyViewAuthAllUsers;
+
+
+    @NotNull
+    @Column(columnDefinition = "boolean default false")
+    @JsonIgnore
     private Boolean historyIsDeleted;
 
     @Builder
-    History(String historyMasterName,
+    History(String historyMasterId,
+            String historyMasterName,
             String historyPreSetName,
+            Boolean historyViewAuthAllUsers,
             Boolean historyIsDeleted) {
+        this.historyMasterId = historyMasterId;
         this.historyMasterName = historyMasterName;
         this.historyPreSetName = historyPreSetName;
         this.historyIsDeleted = historyIsDeleted;
+        this.historyViewAuthAllUsers = historyViewAuthAllUsers;
     }
 }

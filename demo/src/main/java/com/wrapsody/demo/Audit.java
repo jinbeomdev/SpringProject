@@ -22,7 +22,7 @@ public abstract class Audit implements Serializable {
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", updatable = false)
+    @Column(name = "updated_at", nullable = false, updatable = false)
     @LastModifiedDate
     private Date updatedAt;
 }

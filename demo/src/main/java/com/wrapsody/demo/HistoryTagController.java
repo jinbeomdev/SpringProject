@@ -1,7 +1,5 @@
 package com.wrapsody.demo;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,7 +17,7 @@ public class HistoryTagController {
 
     @GetMapping("/history/{historyId}/tag")
     public List<HistoryTag> getAllHistoryTagByHistroyId(@PathVariable (value =  "historyId") Long historyId) {
-        return historyTagRepository.findByHistoryHistoryId(historyId);
+        return historyTagRepository.findByHistoryId(historyId);
     }
 
     @PostMapping("/history/{historyId}/tag")
