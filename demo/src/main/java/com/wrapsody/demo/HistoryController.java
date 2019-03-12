@@ -34,19 +34,17 @@ public class HistoryController {
         return histories.map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
-            ResponseAllHistoryDto responseAllHistoryDto = new ResponseAllHistoryDto(history, tags, auths);
-            return responseAllHistoryDto;
+            return new ResponseAllHistoryDto(history, tags, auths);
         });
     }
 
     @GetMapping("/history/test")
-    public List<ResponseAllHistoryDto> getTop20History(@RequestParam (value = "userId") String userId) {
+    public List<ResponseAllHistoryDto> getTop20History(@RequestParam(value = "userId") String userId) {
         List<History> histories = historyRepository.findTop20ByHistoryMasterIdAndHistoryIsDeletedOrderByCreatedAtDesc(userId, false);
         return histories.stream().map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
-            ResponseAllHistoryDto responseAllHistoryDto = new ResponseAllHistoryDto(history, tags, auths);
-            return responseAllHistoryDto;
+            return new ResponseAllHistoryDto(history, tags, auths);
         }).collect(Collectors.toList());
     }
 
@@ -65,21 +63,21 @@ public class HistoryController {
         log.info(requestWrapsodySetTag.addTags());
         log.info(requestWrapsodySetAuth.addAuths());
 
-    History history = createHistoryDto.toHistoryEntity();
+        History history = createHistoryDto.toHistoryEntity();
 
-    history = historyRepository.save(history);
+        history = historyRepository.save(history);
         tagRepository.saveAll(createHistoryDto.toHistoryTagEntity(history));
         authRepository.saveAll(createHistoryDto.toHistoryAuthEntity(history));
 
         return history;
-}
+    }
 
     @DeleteMapping("/history/{historyId}")
     public Boolean deletedHistory(@PathVariable(value = "historyId") Long historyId) {
-         return historyRepository.findById(historyId).map(history -> {
+        return historyRepository.findById(historyId).map(history -> {
             history.setHistoryIsDeleted(true);
             historyRepository.save(history);
             return true;
-        }).orElse(false);
+        }).orElseThrow(() -> new ResourceNotFoundException("history Id " + historyId + " not found"));
     }
 }
