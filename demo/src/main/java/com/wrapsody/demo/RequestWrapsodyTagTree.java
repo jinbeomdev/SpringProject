@@ -16,6 +16,7 @@ public class RequestWrapsodyTagTree extends RequestWrapsody {
     static private final int PRETTY_FORMAT = 4;
 
     public RequestWrapsodyTagTree(String uuid, String userId) {
+        super("TAGTREE");
         this.getMap().add("MSG", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<tagtree_request>\n" +
                 "   <ver>1.0</ver>\n" +
