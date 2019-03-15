@@ -24,7 +24,9 @@ public class WrapsodyController {
     }
 
     @GetMapping("/wrapsody/document")
-    public ResponseWrapsodyDocument getSyncInfo(@RequestParam (value = "syncId") String syncId) throws UnsupportedEncodingException {
+    public ResponseWrapsodyDocument getSyncInfo(@RequestParam (value = "syncId") String syncId)
+            throws UnsupportedEncodingException,
+            WrapsodyNotFoundException {
         RequestWrapsodyDocument requestWrapsodyDocument = new RequestWrapsodyDocument(syncId);
         return requestWrapsodyDocument.getDocument();
     }

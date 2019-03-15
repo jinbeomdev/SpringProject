@@ -1,13 +1,22 @@
 package com.wrapsody.demo;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriUtils;
+
+import java.io.IOException;
+import java.io.StringReader;
 
 @NoArgsConstructor
 @Getter
@@ -29,5 +38,38 @@ public class RequestWrapsody {
         map.add("LANG", "KO");
         map.add("CHARSET", "UTF-8");
         map.add("ENCTYPE", "BASE64");
+    }
+
+    public boolean statusIsSuccess() {
+        int start = response.getBody().indexOf("STATUS=") + 7;
+        int end = response.getBody().indexOf("&MSG=");
+
+        if (response.getBody().substring(start, end).equals("SUCCESS")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public String getMsg() {
+        int start = response.getBody().indexOf("MSG=") + 4;
+        return UriUtils.decode(response.getBody().substring(start), "UTF-8");
+    }
+
+    public String getFailMsg() {
+        String msg = "";
+
+        SAXBuilder saxBuilder = new SAXBuilder();
+        try {
+            Document document = saxBuilder.build(new StringReader(getMsg()));
+            Element root = document.getRootElement();
+            msg = root.getChildText("MESSAGE");
+        } catch (JDOMException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return msg;
     }
 }

@@ -6,10 +6,8 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.http.HttpEntity;
 import org.springframework.util.Base64Utils;
-import org.springframework.web.util.UriUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,12 +29,15 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
         this.setResponse(this.getRestTemplate().postForEntity(URI, this.getRequest(), String.class));
     }
 
-    ResponseWrapsodyDocument getDocument() throws UnsupportedEncodingException {
-        String xml = this.getResponse().getBody();
-        xml = xml.substring(xml.indexOf("msg=") + 4);
-        xml = UriUtils.decode(xml, Charset.defaultCharset());
+    ResponseWrapsodyDocument getDocument()
+            throws UnsupportedEncodingException,
+            WrapsodyNotFoundException {
 
-        JSONObject json = XML.toJSONObject(xml, true).getJSONObject("syncinfo_result");
+        if (!statusIsSuccess()) {
+            throw new WrapsodyNotFoundException(getFailMsg());
+        }
+
+        JSONObject json = XML.toJSONObject(getMsg(), true).getJSONObject("syncinfo_result");
 
         String fileName = json.getString("filename");
 
@@ -60,7 +61,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                 responseWrapsodyDocument.getAuthList().add(historyAuth);
             } else if (authList instanceof JSONArray) {
                 List<Object> list = ((JSONArray) authList).toList();
-                for(Object object : list) {
+                for (Object object : list) {
                     HistoryAuth historyAuth = new HistoryAuth();
                     historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), "UTF-8"));
                     historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), "UTF-8"));
@@ -70,7 +71,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
             }
         }
 
-        if(!(viewList instanceof String)) {
+        if (!(viewList instanceof String)) {
             viewList = json.getJSONObject("viewAuthList").get("user");
             if (viewList instanceof JSONObject) {
                 HistoryAuth historyAuth = new HistoryAuth();
@@ -90,7 +91,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
             }
         }
 
-        if(!(tagList instanceof String)) {
+        if (!(tagList instanceof String)) {
             tagList = json.getJSONObject("tagList").get("tagInfo");
             if (tagList instanceof JSONObject) {
                 HistoryTag historyTag = new HistoryTag();

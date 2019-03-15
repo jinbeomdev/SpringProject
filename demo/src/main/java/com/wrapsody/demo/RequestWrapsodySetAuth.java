@@ -28,7 +28,15 @@ public class RequestWrapsodySetAuth extends RequestWrapsody {
         this.setResponse(this.getRestTemplate().postForEntity(URI, this.getRequest(), String.class));
     }
 
-    String addAuths() {
-        return this.getResponse().getBody();
+    public String addAuths()
+            throws WrapsodyUnauthorizedException,
+            WrapsodyNotFoundException {
+
+        if (!statusIsSuccess()) {
+            String failMsg = getFailMsg();
+            if (failMsg.contains("PERMISSION_WRONG")) throw new WrapsodyUnauthorizedException(failMsg);
+            throw new WrapsodyNotFoundException(failMsg);
+        }
+        return getMsg();
     }
 }
