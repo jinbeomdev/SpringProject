@@ -28,31 +28,32 @@ public class HistoryController {
     }
 
     @GetMapping("/history")
-    public Page<ResponseAllHistoryDto> getAllHistory(@RequestParam String userId) {
+    public Page<ResponseHistoryDto> getAllHistory(@RequestParam String userId) {
         Pageable pageable = PageRequest.of(0, 20, Sort.by("createdAt"));
         Page<History> histories = historyRepository.findByHistoryMasterIdAndHistoryIsDeleted(userId, false, pageable);
         return histories.map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
-            ResponseAllHistoryDto responseAllHistoryDto = new ResponseAllHistoryDto(history, tags, auths);
-            return responseAllHistoryDto;
+            return new ResponseHistoryDto(history, tags, auths);
         });
     }
 
     @GetMapping("/history/test")
-    public List<ResponseAllHistoryDto> getTop20History(@RequestParam (value = "userId") String userId) {
+    public List<ResponseHistoryDto> getTop20History(@RequestParam(value = "userId") String userId) {
         List<History> histories = historyRepository.findTop20ByHistoryMasterIdAndHistoryIsDeletedOrderByCreatedAtDesc(userId, false);
         return histories.stream().map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
-            ResponseAllHistoryDto responseAllHistoryDto = new ResponseAllHistoryDto(history, tags, auths);
-            return responseAllHistoryDto;
+            return new ResponseHistoryDto(history, tags, auths);
         }).collect(Collectors.toList());
     }
 
-    @PostMapping("history")
-    public History createHistoryTest(@Valid @RequestBody RequestCreateHistoryDto createHistoryDto,
-                                     @RequestParam String syncId) {
+    @PostMapping("/history")
+    public ResponseHistoryDto createHistory(@Valid @RequestBody RequestCreateHistoryDto createHistoryDto,
+                                     @RequestParam String syncId)
+            throws WrapsodyUnauthorizedException,
+            WrapsodyNotFoundException {
+
         RequestWrapsodySetTag requestWrapsodySetTag = new RequestWrapsodySetTag(syncId, createHistoryDto.getTagsAsString());
         RequestWrapsodySetAuth requestWrapsodySetAuth = new RequestWrapsodySetAuth(syncId,
                 createHistoryDto.getMasterIdAsXml(),
@@ -65,21 +66,19 @@ public class HistoryController {
         log.info(requestWrapsodySetTag.addTags());
         log.info(requestWrapsodySetAuth.addAuths());
 
-    History history = createHistoryDto.toHistoryEntity();
+        History history = createHistoryDto.toHistoryEntity();
 
-    history = historyRepository.save(history);
-        tagRepository.saveAll(createHistoryDto.toHistoryTagEntity(history));
-        authRepository.saveAll(createHistoryDto.toHistoryAuthEntity(history));
-
-        return history;
-}
+        return new ResponseHistoryDto(historyRepository.save(history),
+                tagRepository.saveAll(createHistoryDto.toHistoryTagEntity(history)),
+                authRepository.saveAll(createHistoryDto.toHistoryAuthEntity(history)));
+    }
 
     @DeleteMapping("/history/{historyId}")
     public Boolean deletedHistory(@PathVariable(value = "historyId") Long historyId) {
-         return historyRepository.findById(historyId).map(history -> {
+        return historyRepository.findById(historyId).map(history -> {
             history.setHistoryIsDeleted(true);
             historyRepository.save(history);
             return true;
-        }).orElse(false);
+        }).orElseThrow(() -> new ResourceNotFoundException("history Id " + historyId + " not found"));
     }
 }

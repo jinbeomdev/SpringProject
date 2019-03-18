@@ -17,10 +17,20 @@ public class RequestWrapsodySetTag extends RequestWrapsody {
                 "<tags>" + Base64Utils.encodeToString(tags.getBytes()) + "</tags>" +
                 "<tagCodes></tagCodes>" +
                 "</tag_request>");
-    }
-    String addTags() {
         this.setRequest(new HttpEntity(this.getMap(), this.getHttpHeaders()));
         this.setResponse(this.getRestTemplate().postForEntity(URI, this.getRequest(), String.class));
-        return this.getResponse().getBody();
+    }
+
+    String addTags() throws WrapsodyUnauthorizedException,
+            WrapsodyNotFoundException {
+        if(!statusIsSuccess()) {
+            String failMsg = getFailMsg();
+            if (failMsg.contains("PERMISSION_WRONG") ||
+                failMsg.contains("INVALID_MASTERID")) {
+                throw new WrapsodyUnauthorizedException(failMsg);
+            }
+            throw new WrapsodyNotFoundException(failMsg);
+        }
+        return getMsg();
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResponseAllHistoryDto {
+public class ResponseHistoryDto {
     private History history;
     private List<HistoryTag> tags;
     private List<HistoryAuth> auths;
