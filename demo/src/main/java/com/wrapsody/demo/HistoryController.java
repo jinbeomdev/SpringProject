@@ -34,6 +34,7 @@ public class HistoryController {
         return histories.map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
+            ResponseHistoryDto responseHistoryDto = new ResponseHistoryDto(history, tags, auths);
             return new ResponseHistoryDto(history, tags, auths);
         });
     }
@@ -44,6 +45,7 @@ public class HistoryController {
         return histories.stream().map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
+            ResponseHistoryDto responseHistoryDto = new ResponseHistoryDto(history, tags, auths);
             return new ResponseHistoryDto(history, tags, auths);
         }).collect(Collectors.toList());
     }
