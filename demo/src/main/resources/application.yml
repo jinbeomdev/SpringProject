@@ -1,9 +1,9 @@
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: update
-
   datasource:
-    url: jdbc:mariadb://localhost:3306/history
+    url: jdbc:mariadb://192.168.60.104:3306/history
     username: root
     password: 1111
+
+  jpa:
+    hibernate:
+      ddl: update
