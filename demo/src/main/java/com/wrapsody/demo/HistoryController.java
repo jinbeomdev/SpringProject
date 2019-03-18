@@ -28,25 +28,25 @@ public class HistoryController {
     }
 
     @GetMapping("/history")
-    public Page<ResponseAllHistoryDto> getAllHistory(@RequestParam String userId) {
+    public Page<ResponseHistoryDto> getAllHistory(@RequestParam String userId) {
         Pageable pageable = PageRequest.of(0, 20, Sort.by("createdAt"));
         Page<History> histories = historyRepository.findByHistoryMasterIdAndHistoryIsDeleted(userId, false, pageable);
         return histories.map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
-            ResponseAllHistoryDto responseAllHistoryDto = new ResponseAllHistoryDto(history, tags, auths);
-            return responseAllHistoryDto;
+            ResponseHistoryDto responseHistoryDto = new ResponseHistoryDto(history, tags, auths);
+            return responseHistoryDto;
         });
     }
 
     @GetMapping("/history/test")
-    public List<ResponseAllHistoryDto> getTop20History(@RequestParam (value = "userId") String userId) {
+    public List<ResponseHistoryDto> getTop20History(@RequestParam (value = "userId") String userId) {
         List<History> histories = historyRepository.findTop20ByHistoryMasterIdAndHistoryIsDeletedOrderByCreatedAtDesc(userId, false);
         return histories.stream().map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
-            ResponseAllHistoryDto responseAllHistoryDto = new ResponseAllHistoryDto(history, tags, auths);
-            return responseAllHistoryDto;
+            ResponseHistoryDto responseHistoryDto = new ResponseHistoryDto(history, tags, auths);
+            return responseHistoryDto;
         }).collect(Collectors.toList());
     }
 
