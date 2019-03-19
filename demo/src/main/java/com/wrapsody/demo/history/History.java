@@ -33,7 +33,6 @@ public class History extends Audit {
     @Column
     private Boolean historyViewAuthAllUsers;
 
-
     @NotNull
     @Column(columnDefinition = "boolean default false")
     @JsonIgnore
@@ -45,7 +44,7 @@ public class History extends Audit {
     private Boolean historyIsFavorite;
 
     @Builder
-    History(String historyMasterId,
+    public History(String historyMasterId,
             String historyMasterName,
             String historyPreSetName,
             Boolean historyViewAuthAllUsers,
