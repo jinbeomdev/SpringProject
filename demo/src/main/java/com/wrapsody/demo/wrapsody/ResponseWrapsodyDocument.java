@@ -17,6 +17,6 @@ import java.util.List;
 public class ResponseWrapsodyDocument {
     private String fileName;
     private boolean viewAuthAllUsers;
-    List<HistoryAuth> authList = new ArrayList<HistoryAuth>();
-    List<HistoryTag> tagList = new ArrayList<HistoryTag>();
+    List<HistoryTag> tags = new ArrayList<>();
+    List<HistoryAuth> auths = new ArrayList<>();
 }
