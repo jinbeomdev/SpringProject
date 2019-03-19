@@ -1,7 +1,10 @@
 package com.wrapsody.demo.history;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -36,16 +39,23 @@ public class History extends Audit {
     @JsonIgnore
     private Boolean historyIsDeleted;
 
+    @NotNull
+    @Column(columnDefinition = "boolean default false")
+    @JsonIgnore
+    private Boolean historyIsFavorite;
+
     @Builder
     History(String historyMasterId,
             String historyMasterName,
             String historyPreSetName,
             Boolean historyViewAuthAllUsers,
-            Boolean historyIsDeleted) {
+            Boolean historyIsDeleted,
+            Boolean historyIsFavorite) {
         this.historyMasterId = historyMasterId;
         this.historyMasterName = historyMasterName;
         this.historyPreSetName = historyPreSetName;
         this.historyIsDeleted = historyIsDeleted;
         this.historyViewAuthAllUsers = historyViewAuthAllUsers;
+        this.historyIsFavorite = historyIsFavorite;
     }
 }

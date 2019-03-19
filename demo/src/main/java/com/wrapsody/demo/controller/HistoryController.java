@@ -35,7 +35,7 @@ public class HistoryController {
         this.authRepository = authRepository;
     }
 
-    @GetMapping("/history")
+    @GetMapping("/history/all")
     public Page<ResponseHistoryDto> getAllHistory(@RequestParam String userId) {
         Pageable pageable = PageRequest.of(0, 20, Sort.by("createdAt"));
         Page<History> histories = historyRepository.findByHistoryMasterIdAndHistoryIsDeleted(userId, false, pageable);
@@ -47,9 +47,9 @@ public class HistoryController {
         });
     }
 
-    @GetMapping("/history/test")
+    @GetMapping("/history")
     public List<ResponseHistoryDto> getTop20History(@RequestParam(value = "userId") String userId) {
-        List<History> histories = historyRepository.findTop20ByHistoryMasterIdAndHistoryIsDeletedOrderByCreatedAtDesc(userId, false);
+        List<History> histories = historyRepository.findTop20ByHistoryMasterIdAndHistoryIsDeletedOrderByHistoryIsFavoriteDescAndCreatedAtDesc(userId, false);
         return histories.stream().map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
@@ -89,6 +89,16 @@ public class HistoryController {
             history.setHistoryIsDeleted(true);
             historyRepository.save(history);
             return true;
+        }).orElseThrow(() -> new ResourceNotFoundException("history Id " + historyId + " not found"));
+    }
+
+    @PutMapping("/history/{historyId}/favorite/{isFavorite}")
+    public List<ResponseHistoryDto> alterFavorite(@PathVariable(value = "historyId") Long historyId,
+                                                  @PathVariable(value = "isFavorite") Boolean isFavorite) {
+        return historyRepository.findById(historyId).map(history -> {
+            history.setHistoryIsFavorite(isFavorite);
+            historyRepository.save(history);
+            return getTop20History(history.getHistoryMasterId());
         }).orElseThrow(() -> new ResourceNotFoundException("history Id " + historyId + " not found"));
     }
 }

@@ -31,6 +31,7 @@ public class RequestCreateHistoryDto {
                 .historyPreSetName(historyPreSetName)
                 .historyViewAuthAllUsers(historyViewAuthAllUsers)
                 .historyIsDeleted(false)
+                .historyIsFavorite(false)
                 .build();
     }
 

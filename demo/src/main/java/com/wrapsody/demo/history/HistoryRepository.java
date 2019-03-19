@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface HistoryRepository extends JpaRepository<History, Long> {
     Page<History> findByHistoryMasterIdAndHistoryIsDeleted(String historyMasterId, Boolean historyIsDeleted, Pageable pageable);
-    List<History> findTop20ByHistoryMasterIdAndHistoryIsDeletedOrderByCreatedAtDesc(String historyMasterId, Boolean historyIsDeleted);
+    List<History> findTop20ByHistoryMasterIdAndHistoryIsDeletedOrderByHistoryIsFavoriteDescAndCreatedAtDesc(String historyMasterId, Boolean historyIsDeleted);
 }
