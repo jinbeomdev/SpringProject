@@ -1,6 +1,7 @@
 package com.wrapsody.demo.wrapsody;
 
-import com.wrapsody.demo.exception.WrapsodyNotFoundException;
+import com.wrapsody.demo.wrapsody.dto.ResponseWrapsodyDocumentDto;
+import com.wrapsody.demo.wrapsody.exception.WrapsodyNotFoundException;
 import com.wrapsody.demo.history.HistoryAuth;
 import com.wrapsody.demo.history.HistoryAuthType;
 import com.wrapsody.demo.history.HistoryTag;
@@ -34,7 +35,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
         this.setResponse(this.getRestTemplate().postForEntity(URI, this.getRequest(), String.class));
     }
 
-    public ResponseWrapsodyDocument getDocument()
+    public ResponseWrapsodyDocumentDto getDocument()
             throws UnsupportedEncodingException,
             WrapsodyNotFoundException {
 
@@ -52,9 +53,9 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
         Object viewList = json.get("viewAuthList");
         Object tagList = json.get("tagList");
 
-        ResponseWrapsodyDocument responseWrapsodyDocument = new ResponseWrapsodyDocument();
-        responseWrapsodyDocument.setFileName(new String(Base64Utils.decode(fileName.getBytes()), "UTF-8"));
-        responseWrapsodyDocument.setViewAuthAllUsers(viewAuthAllUsers);
+        ResponseWrapsodyDocumentDto responseWrapsodyDocumentDto = new ResponseWrapsodyDocumentDto();
+        responseWrapsodyDocumentDto.setFileName(new String(Base64Utils.decode(fileName.getBytes()), "UTF-8"));
+        responseWrapsodyDocumentDto.setViewAuthAllUsers(viewAuthAllUsers);
 
         if (!(authList instanceof String)) {
             authList = json.getJSONObject("checkoutAuthList").get("user");
@@ -63,7 +64,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                 historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) authList).getString("userId").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) authList).getString("userName").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthType(HistoryAuthType.REVISION);
-                responseWrapsodyDocument.getAuths().add(historyAuth);
+                responseWrapsodyDocumentDto.getAuths().add(historyAuth);
             } else if (authList instanceof JSONArray) {
                 List<Object> list = ((JSONArray) authList).toList();
                 for (Object object : list) {
@@ -71,7 +72,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                     historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), "UTF-8"));
                     historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), "UTF-8"));
                     historyAuth.setHistoryAuthType(HistoryAuthType.REVISION);
-                    responseWrapsodyDocument.getAuths().add(historyAuth);
+                    responseWrapsodyDocumentDto.getAuths().add(historyAuth);
                 }
             }
         }
@@ -83,7 +84,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                 historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) viewList).getString("userId").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) viewList).getString("userName").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthType(HistoryAuthType.READ);
-                responseWrapsodyDocument.getAuths().add(historyAuth);
+                responseWrapsodyDocumentDto.getAuths().add(historyAuth);
             } else if (viewList instanceof JSONArray) {
                 List<Object> list = ((JSONArray) viewList).toList();
                 for (Object object : list) {
@@ -91,7 +92,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                     historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), "UTF-8"));
                     historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), "UTF-8"));
                     historyAuth.setHistoryAuthType(HistoryAuthType.READ);
-                    responseWrapsodyDocument.getAuths().add(historyAuth);
+                    responseWrapsodyDocumentDto.getAuths().add(historyAuth);
                 }
             }
         }
@@ -109,7 +110,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                 } else {
                     historyTag.setHistoryTagType(HistoryTagType.CUSTOM);
                 }
-                responseWrapsodyDocument.getTags().add(historyTag);
+                responseWrapsodyDocumentDto.getTags().add(historyTag);
             } else if (tagList instanceof JSONArray) {
                 List<Object> list = ((JSONArray) tagList).toList();
                 for (Object object : list) {
@@ -123,11 +124,11 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                     } else {
                         historyTag.setHistoryTagType(HistoryTagType.CUSTOM);
                     }
-                    responseWrapsodyDocument.getTags().add(historyTag);
+                    responseWrapsodyDocumentDto.getTags().add(historyTag);
                 }
             }
         }
 
-        return responseWrapsodyDocument;
+        return responseWrapsodyDocumentDto;
     }
 }

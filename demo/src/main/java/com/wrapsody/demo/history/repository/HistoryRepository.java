@@ -1,5 +1,6 @@
-package com.wrapsody.demo.history;
+package com.wrapsody.demo.history.repository;
 
+import com.wrapsody.demo.history.History;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

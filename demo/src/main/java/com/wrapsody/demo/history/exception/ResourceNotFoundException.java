@@ -1,4 +1,4 @@
-package com.wrapsody.demo.exception;
+package com.wrapsody.demo.history.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException() {

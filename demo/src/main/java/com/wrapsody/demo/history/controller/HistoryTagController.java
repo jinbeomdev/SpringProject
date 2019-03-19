@@ -1,11 +1,11 @@
-package com.wrapsody.demo.controller;
+package com.wrapsody.demo.history.controller;
 
 import com.wrapsody.demo.history.History;
-import com.wrapsody.demo.history.HistoryRepository;
+import com.wrapsody.demo.history.repository.HistoryRepository;
 import com.wrapsody.demo.history.HistoryTag;
-import com.wrapsody.demo.history.HistoryTagRepository;
-import com.wrapsody.demo.dto.RequestCreateHistoryTagDto;
-import com.wrapsody.demo.dto.RequestCreateHistoryTagsDto;
+import com.wrapsody.demo.history.repository.HistoryTagRepository;
+import com.wrapsody.demo.history.dto.RequestCreateHistoryTagDto;
+import com.wrapsody.demo.history.dto.RequestCreateHistoryTagsDto;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

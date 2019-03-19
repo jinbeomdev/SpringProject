@@ -1,4 +1,4 @@
-package com.wrapsody.demo.dto;
+package com.wrapsody.demo.history.dto;
 
 import com.wrapsody.demo.history.History;
 import com.wrapsody.demo.history.HistoryAuth;

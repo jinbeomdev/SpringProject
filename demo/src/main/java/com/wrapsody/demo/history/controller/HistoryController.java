@@ -1,11 +1,14 @@
-package com.wrapsody.demo.controller;
+package com.wrapsody.demo.history.controller;
 
-import com.wrapsody.demo.dto.RequestCreateHistoryDto;
-import com.wrapsody.demo.dto.ResponseHistoryDto;
-import com.wrapsody.demo.exception.ResourceNotFoundException;
-import com.wrapsody.demo.exception.WrapsodyNotFoundException;
-import com.wrapsody.demo.exception.WrapsodyUnauthorizedException;
+import com.wrapsody.demo.history.dto.RequestCreateHistoryDto;
+import com.wrapsody.demo.history.dto.ResponseHistoryDto;
+import com.wrapsody.demo.history.exception.ResourceNotFoundException;
+import com.wrapsody.demo.wrapsody.exception.WrapsodyNotFoundException;
+import com.wrapsody.demo.wrapsody.exception.WrapsodyUnauthorizedException;
 import com.wrapsody.demo.history.*;
+import com.wrapsody.demo.history.repository.HistoryAuthRepository;
+import com.wrapsody.demo.history.repository.HistoryRepository;
+import com.wrapsody.demo.history.repository.HistoryTagRepository;
 import com.wrapsody.demo.wrapsody.RequestWrapsodySetAuth;
 import com.wrapsody.demo.wrapsody.RequestWrapsodySetTag;
 import lombok.extern.slf4j.Slf4j;
@@ -53,31 +56,13 @@ public class HistoryController {
         return histories.stream().map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());
-            ResponseHistoryDto responseHistoryDto = new ResponseHistoryDto(history, tags, auths);
             return new ResponseHistoryDto(history, tags, auths);
         }).collect(Collectors.toList());
     }
 
     @PostMapping("/history")
-    public ResponseHistoryDto createHistory(@Valid @RequestBody RequestCreateHistoryDto createHistoryDto,
-                                     @RequestParam String syncId)
-            throws WrapsodyUnauthorizedException,
-            WrapsodyNotFoundException {
-
-        RequestWrapsodySetTag requestWrapsodySetTag = new RequestWrapsodySetTag(syncId, createHistoryDto.getTagsAsString());
-        RequestWrapsodySetAuth requestWrapsodySetAuth = new RequestWrapsodySetAuth(syncId,
-                createHistoryDto.getMasterIdAsXml(),
-                createHistoryDto.getCheckoutUserIdsAsXml(),
-                createHistoryDto.getCheckoutDeptCodesAsXml(),
-                createHistoryDto.getHistoryViewAuthAllUsers(),
-                createHistoryDto.getViewUserIdsAsXml(),
-                createHistoryDto.getViewDeptCodes());
-
-        log.info(requestWrapsodySetTag.addTags());
-        log.info(requestWrapsodySetAuth.addAuths());
-
+    public ResponseHistoryDto createHistory(@Valid @RequestBody RequestCreateHistoryDto createHistoryDto) {
         History history = createHistoryDto.toHistoryEntity();
-
         return new ResponseHistoryDto(historyRepository.save(history),
                 tagRepository.saveAll(createHistoryDto.toHistoryTagEntity(history)),
                 authRepository.saveAll(createHistoryDto.toHistoryAuthEntity(history)));

@@ -1,5 +1,6 @@
-package com.wrapsody.demo.history;
+package com.wrapsody.demo.history.repository;
 
+import com.wrapsody.demo.history.HistoryAuth;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

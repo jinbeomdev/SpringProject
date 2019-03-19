@@ -1,4 +1,4 @@
-package com.wrapsody.demo.exception;
+package com.wrapsody.demo.wrapsody.exception;
 
 public class WrapsodyUnauthorizedException extends Exception {
     public WrapsodyUnauthorizedException(String message) {

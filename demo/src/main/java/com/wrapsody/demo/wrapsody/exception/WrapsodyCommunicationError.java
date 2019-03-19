@@ -1,4 +1,4 @@
-package com.wrapsody.demo.exception;
+package com.wrapsody.demo.wrapsody.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.wrapsody.demo.wrapsody;
+package com.wrapsody.demo.wrapsody.dto;
 
 import com.wrapsody.demo.history.HistoryAuth;
 import com.wrapsody.demo.history.HistoryTag;
@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResponseWrapsodyDocument {
+public class ResponseWrapsodyDocumentDto {
     private String fileName;
     private boolean viewAuthAllUsers;
     List<HistoryTag> tags = new ArrayList<>();

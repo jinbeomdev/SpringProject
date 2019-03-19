@@ -1,7 +1,7 @@
 package com.wrapsody.demo.wrapsody;
 
-import com.wrapsody.demo.exception.WrapsodyNotFoundException;
-import com.wrapsody.demo.exception.WrapsodyUnauthorizedException;
+import com.wrapsody.demo.wrapsody.exception.WrapsodyNotFoundException;
+import com.wrapsody.demo.wrapsody.exception.WrapsodyUnauthorizedException;
 import org.springframework.http.HttpEntity;
 import org.springframework.util.Base64Utils;
 
