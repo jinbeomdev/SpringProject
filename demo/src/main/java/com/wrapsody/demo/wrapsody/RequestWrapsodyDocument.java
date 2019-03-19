@@ -63,7 +63,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                 historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) authList).getString("userId").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) authList).getString("userName").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthType(HistoryAuthType.REVISION);
-                responseWrapsodyDocument.getAuthList().add(historyAuth);
+                responseWrapsodyDocument.getAuths().add(historyAuth);
             } else if (authList instanceof JSONArray) {
                 List<Object> list = ((JSONArray) authList).toList();
                 for (Object object : list) {
@@ -71,7 +71,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                     historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), "UTF-8"));
                     historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), "UTF-8"));
                     historyAuth.setHistoryAuthType(HistoryAuthType.REVISION);
-                    responseWrapsodyDocument.getAuthList().add(historyAuth);
+                    responseWrapsodyDocument.getAuths().add(historyAuth);
                 }
             }
         }
@@ -83,7 +83,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                 historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) viewList).getString("userId").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) viewList).getString("userName").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthType(HistoryAuthType.READ);
-                responseWrapsodyDocument.getAuthList().add(historyAuth);
+                responseWrapsodyDocument.getAuths().add(historyAuth);
             } else if (viewList instanceof JSONArray) {
                 List<Object> list = ((JSONArray) viewList).toList();
                 for (Object object : list) {
@@ -91,7 +91,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                     historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), "UTF-8"));
                     historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), "UTF-8"));
                     historyAuth.setHistoryAuthType(HistoryAuthType.READ);
-                    responseWrapsodyDocument.getAuthList().add(historyAuth);
+                    responseWrapsodyDocument.getAuths().add(historyAuth);
                 }
             }
         }
@@ -109,7 +109,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                 } else {
                     historyTag.setHistoryTagType(HistoryTagType.CUSTOM);
                 }
-                responseWrapsodyDocument.getTagList().add(historyTag);
+                responseWrapsodyDocument.getTags().add(historyTag);
             } else if (tagList instanceof JSONArray) {
                 List<Object> list = ((JSONArray) tagList).toList();
                 for (Object object : list) {
@@ -123,7 +123,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                     } else {
                         historyTag.setHistoryTagType(HistoryTagType.CUSTOM);
                     }
-                    responseWrapsodyDocument.getTagList().add(historyTag);
+                    responseWrapsodyDocument.getTags().add(historyTag);
                 }
             }
         }
