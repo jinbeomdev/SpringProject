@@ -1,5 +1,8 @@
 package com.wrapsody.demo;
 
+import com.wrapsody.demo.history.HistoryAuthRepository;
+import com.wrapsody.demo.history.HistoryRepository;
+import com.wrapsody.demo.history.HistoryTagRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +14,8 @@ public class LoadDatabase {
 
     @Bean
     CommandLineRunner initDatabase(HistoryRepository historyRepository,
-                 HistoryAuthRepository authRepository,
-                 HistoryTagRepository tagRepository) {
+                                   HistoryAuthRepository authRepository,
+                                   HistoryTagRepository tagRepository) {
         return args -> {
 /*            History history = History.builder().historyMasterName("김진범").historyMasterId("jinbeom").historyPreSetName("김진범_템플릿").historyIsDeleted(false).build();
             HistoryTag historyTag1 = HistoryTag.builder().historyTagName("보안").historyTagType(HistoryTagType.REQUIRED).build();
