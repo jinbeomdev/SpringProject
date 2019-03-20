@@ -52,8 +52,8 @@ public class History extends Audit {
         this.historyMasterId = historyMasterId;
         this.historyMasterName = historyMasterName;
         this.historyPreSetName = historyPreSetName;
-        this.historyIsDeleted = historyIsDeleted;
         this.historyViewAuthAllUsers = historyViewAuthAllUsers;
+        this.historyIsDeleted = historyIsDeleted;
         this.historyIsFavorite = historyIsFavorite;
     }
 }
