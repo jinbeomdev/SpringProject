@@ -16,7 +16,6 @@ import java.util.List;
 @Setter
 public class RequestWrapsodyDocumentDto {
     private String syncId;
-    private String masterId;
     private Boolean viewAuthAllUsers;
     List<HistoryTag> tags = new ArrayList<>();
     List<HistoryAuth> auths = new ArrayList<>();
