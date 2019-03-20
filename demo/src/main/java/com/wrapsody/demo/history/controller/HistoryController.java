@@ -53,6 +53,7 @@ public class HistoryController {
     @GetMapping("/history")
     public List<ResponseHistoryDto> getTop20History(@RequestParam(value = "userId") String userId) {
         List<History> histories = historyRepository.findTop20ByHistoryMasterIdAndHistoryIsDeletedOrderByHistoryIsFavoriteDescCreatedAtDesc(userId, false);
+        log.info(histories.toString());
         return histories.stream().map(history -> {
             List<HistoryTag> tags = tagRepository.findByHistoryId(history.getId());
             List<HistoryAuth> auths = authRepository.findByHistoryId(history.getId());

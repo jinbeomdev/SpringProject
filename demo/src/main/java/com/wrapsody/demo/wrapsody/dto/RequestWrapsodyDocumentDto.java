@@ -30,7 +30,7 @@ public class RequestWrapsodyDocumentDto {
     }
 
     public String getMasterIdAsXml() {
-        return new String("<userId>" + Base64Utils.encodeToString(masterId.getBytes()) + "</userId>");
+        return "<userId>" + Base64Utils.encodeToString(masterId.getBytes()) + "</userId>";
     }
 
     public String getCheckoutUserIdsAsXml() {

@@ -50,7 +50,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
 
         boolean viewAuthAllUsers = json.getBoolean("viewAuthAllUsers");
         String masterId = new String(Base64Utils.decode(json.getJSONObject("master").getString("userId").getBytes()), StandardCharsets.UTF_8);
-        String masterName = json.getString("");
+        String masterName = new String(Base64Utils.decode(json.getJSONObject("master").getString("userName").getBytes()), StandardCharsets.UTF_8);
 
         Object authList = json.get("checkoutAuthList");
         Object viewList = json.get("viewAuthList");
