@@ -23,7 +23,7 @@ public class ResponseHistoryDto extends History {
         setHistoryPreSetName(history.getHistoryPreSetName());
         setHistoryViewAuthAllUsers(history.getHistoryViewAuthAllUsers());
         setHistoryIsDeleted(history.getHistoryIsDeleted());
-        setHistoryIsFavorite(getHistoryIsFavorite());
+        setHistoryIsFavorite(history.getHistoryIsFavorite());
 
         this.tags = tags;
         this.auths = auths;
