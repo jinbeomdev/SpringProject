@@ -14,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.util.Base64Utils;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,29 +49,36 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
         String fileName = json.getString("filename");
 
         boolean viewAuthAllUsers = json.getBoolean("viewAuthAllUsers");
+        String masterId = new String(Base64Utils.decode(json.getJSONObject("master").getString("userId").getBytes()), StandardCharsets.UTF_8);
+        String masterName = json.getString("");
 
         Object authList = json.get("checkoutAuthList");
         Object viewList = json.get("viewAuthList");
         Object tagList = json.get("tagList");
 
         ResponseWrapsodyDocumentDto responseWrapsodyDocumentDto = new ResponseWrapsodyDocumentDto();
-        responseWrapsodyDocumentDto.setFileName(new String(Base64Utils.decode(fileName.getBytes()), "UTF-8"));
+        responseWrapsodyDocumentDto.setFileName(new String(Base64Utils.decode(fileName.getBytes()), StandardCharsets.UTF_8));
         responseWrapsodyDocumentDto.setViewAuthAllUsers(viewAuthAllUsers);
+        responseWrapsodyDocumentDto.getAuths().add(HistoryAuth.builder()
+                .historyAuthId(masterId)
+                .historyAuthName(masterName)
+                .historyAuthType(HistoryAuthType.MASTER)
+                .build());
 
         if (!(authList instanceof String)) {
             authList = json.getJSONObject("checkoutAuthList").get("user");
             if (authList instanceof JSONObject) {
                 HistoryAuth historyAuth = new HistoryAuth();
-                historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) authList).getString("userId").getBytes()), "UTF-8"));
-                historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) authList).getString("userName").getBytes()), "UTF-8"));
+                historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) authList).getString("userId").getBytes()), StandardCharsets.UTF_8));
+                historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) authList).getString("userName").getBytes()), StandardCharsets.UTF_8));
                 historyAuth.setHistoryAuthType(HistoryAuthType.REVISION);
                 responseWrapsodyDocumentDto.getAuths().add(historyAuth);
             } else if (authList instanceof JSONArray) {
                 List<Object> list = ((JSONArray) authList).toList();
                 for (Object object : list) {
                     HistoryAuth historyAuth = new HistoryAuth();
-                    historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), "UTF-8"));
-                    historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), "UTF-8"));
+                    historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), StandardCharsets.UTF_8));
+                    historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), StandardCharsets.UTF_8));
                     historyAuth.setHistoryAuthType(HistoryAuthType.REVISION);
                     responseWrapsodyDocumentDto.getAuths().add(historyAuth);
                 }

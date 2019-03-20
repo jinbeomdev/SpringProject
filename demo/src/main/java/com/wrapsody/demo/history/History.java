@@ -40,7 +40,6 @@ public class History extends Audit {
 
     @NotNull
     @Column(columnDefinition = "boolean default false")
-    @JsonIgnore
     private Boolean historyIsFavorite;
 
     @Builder
