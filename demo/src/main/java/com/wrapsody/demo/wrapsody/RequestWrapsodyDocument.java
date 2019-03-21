@@ -65,15 +65,9 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
 
         if (!(authList instanceof String)) {
             authList = json.getJSONObject("checkoutAuthList").get("user");
-            if (authList instanceof JSONObject) {
-                HistoryAuth historyAuth = new HistoryAuth();
-                historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) authList).getString("userId").getBytes()), StandardCharsets.UTF_8));
-                historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) authList).getString("userName").getBytes()), StandardCharsets.UTF_8));
-                historyAuth.setHistoryAuthType(HistoryAuthType.REVISION);
-                responseWrapsodyDocumentDto.getAuths().add(historyAuth);
-            } else if (authList instanceof JSONArray) {
+            if (authList instanceof JSONArray) {
                 List<Object> list = ((JSONArray) authList).toList();
-                for (Object object : list) {
+                for (Object object : list.subList(1, list.size())) {
                     HistoryAuth historyAuth = new HistoryAuth();
                     historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), StandardCharsets.UTF_8));
                     historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), StandardCharsets.UTF_8));
@@ -91,7 +85,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                 historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) viewList).getString("userName").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthType(HistoryAuthType.READ);
                 responseWrapsodyDocumentDto.getAuths().add(historyAuth);
-            } else if (viewList instanceof JSONArray) {
+            } else {
                 List<Object> list = ((JSONArray) viewList).toList();
                 for (Object object : list) {
                     HistoryAuth historyAuth = new HistoryAuth();
@@ -117,7 +111,7 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
                     historyTag.setHistoryTagType(HistoryTagType.CUSTOM);
                 }
                 responseWrapsodyDocumentDto.getTags().add(historyTag);
-            } else if (tagList instanceof JSONArray) {
+            } else {
                 List<Object> list = ((JSONArray) tagList).toList();
                 for (Object object : list) {
                     HistoryTag historyTag = new HistoryTag();
