@@ -5,6 +5,7 @@ import com.wrapsody.demo.wrapsody.dto.RequestWrapsodyDocumentDto;
 import com.wrapsody.demo.wrapsody.dto.ResponseWrapsodyDocumentDto;
 import com.wrapsody.demo.wrapsody.exception.WrapsodyNotFoundException;
 import com.wrapsody.demo.wrapsody.exception.WrapsodyUnauthorizedException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import sun.awt.SunHints;
 
@@ -45,6 +46,8 @@ public class WrapsodyController {
                 requestDto.getViewAuthAllUsers(),
                 requestDto.getViewUserIdsAsXml(),
                 requestDto.getViewDeptCodes());
+
+
         try {
             requestWrapsodySetTag.addTags();
             requestWrapsodySetAuth.addAuths();
