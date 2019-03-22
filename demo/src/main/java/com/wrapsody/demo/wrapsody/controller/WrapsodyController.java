@@ -5,9 +5,7 @@ import com.wrapsody.demo.wrapsody.dto.RequestWrapsodyDocumentDto;
 import com.wrapsody.demo.wrapsody.dto.ResponseWrapsodyDocumentDto;
 import com.wrapsody.demo.wrapsody.exception.WrapsodyNotFoundException;
 import com.wrapsody.demo.wrapsody.exception.WrapsodyUnauthorizedException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import sun.awt.SunHints;
 
 import java.io.UnsupportedEncodingException;
 
@@ -37,7 +35,7 @@ public class WrapsodyController {
     }
 
     @PostMapping("/wrapsody/document")
-    public void applyWrapsody(@RequestBody RequestWrapsodyDocumentDto requestDto) {
+    public void applyWrapsody(@RequestBody RequestWrapsodyDocumentDto requestDto) throws WrapsodyNotFoundException, WrapsodyUnauthorizedException {
         RequestWrapsodySetTag requestWrapsodySetTag = new RequestWrapsodySetTag(requestDto.getSyncId(), requestDto.getTagsAsString());
         RequestWrapsodySetAuth requestWrapsodySetAuth = new RequestWrapsodySetAuth(requestDto.getSyncId(),
                 requestDto.getMasterIdAsXml(),
@@ -47,14 +45,7 @@ public class WrapsodyController {
                 requestDto.getViewUserIdsAsXml(),
                 requestDto.getViewDeptCodes());
 
-
-        try {
-            requestWrapsodySetTag.addTags();
-            requestWrapsodySetAuth.addAuths();
-        } catch (WrapsodyNotFoundException notFoundEx) {
-            notFoundEx.printStackTrace();
-        } catch (WrapsodyUnauthorizedException UnAuthEx) {
-            UnAuthEx.printStackTrace();
-        }
+        requestWrapsodySetTag.addTags();
+        requestWrapsodySetAuth.addAuths();
     }
 }

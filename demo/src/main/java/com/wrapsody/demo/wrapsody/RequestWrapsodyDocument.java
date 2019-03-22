@@ -1,12 +1,11 @@
 package com.wrapsody.demo.wrapsody;
 
-import com.wrapsody.demo.wrapsody.dto.ResponseWrapsodyDocumentDto;
-import com.wrapsody.demo.wrapsody.exception.WrapsodyNotFoundException;
 import com.wrapsody.demo.history.HistoryAuth;
 import com.wrapsody.demo.history.HistoryAuthType;
 import com.wrapsody.demo.history.HistoryTag;
 import com.wrapsody.demo.history.HistoryTagType;
-import lombok.extern.slf4j.Slf4j;
+import com.wrapsody.demo.wrapsody.dto.ResponseWrapsodyDocumentDto;
+import com.wrapsody.demo.wrapsody.exception.WrapsodyNotFoundException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
@@ -18,7 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 
-@Slf4j
 public class RequestWrapsodyDocument extends RequestWrapsody {
 
     private ResponseWrapsodyDocumentDto responseWrapsodyDocumentDto;
