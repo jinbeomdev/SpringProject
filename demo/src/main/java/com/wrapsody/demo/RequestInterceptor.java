@@ -16,7 +16,8 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpServletRequest requestCacheWrapperObject =  new ContentCachingRequestWrapper(request);
-        log.info(requestCacheWrapperObject.getParameterMap().toString());
+        requestCacheWrapperObject.getParameterMap();
+        log.info(((ContentCachingRequestWrapper) requestCacheWrapperObject).getContentAsByteArray().toString());
         return true;
     }
 
