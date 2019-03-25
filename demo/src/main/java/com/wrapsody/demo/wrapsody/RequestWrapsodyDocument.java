@@ -70,30 +70,30 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
             authList = json.getJSONObject("checkoutAuthList").get("user");
             if(authList instanceof JSONArray) {
                 List<Object> list = ((JSONArray) authList).toList();
-                for (Object object : list.subList(1, list.size())) {
+                for (Object object : list) {
                     HistoryAuth historyAuth = new HistoryAuth();
                     historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), StandardCharsets.UTF_8));
                     historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), StandardCharsets.UTF_8));
                     historyAuth.setHistoryAuthType(HistoryAuthType.REVISION);
-                    responseWrapsodyDocumentDto.getAuths().add(historyAuth);
+                    if(!historyAuth.getHistoryAuthId().equals(masterId)) responseWrapsodyDocumentDto.getAuths().add(historyAuth);
                 }
             }
         }
 
         if (!(depthAuthList instanceof String)) {
-            depthAuthList = json.getJSONObject("checkoutDeptAuthList").get("user");
+            depthAuthList = json.getJSONObject("checkoutDeptAuthList").get("dept");
             if(depthAuthList instanceof JSONObject) {
                 HistoryAuth historyAuth = new HistoryAuth();
-                historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) viewList).getString("userId").getBytes()), "UTF-8"));
-                historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) viewList).getString("userName").getBytes()), "UTF-8"));
+                historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) viewList).getString("deptCode").getBytes()), "UTF-8"));
+                historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) viewList).getString("deptName").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthType(HistoryAuthType.DEPT_REVISION);
                 responseWrapsodyDocumentDto.getAuths().add(historyAuth);
             } else {
                 List<Object> list = ((JSONArray) depthAuthList).toList();
                 for (Object object : list) {
                     HistoryAuth historyAuth = new HistoryAuth();
-                    historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), StandardCharsets.UTF_8));
-                    historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), StandardCharsets.UTF_8));
+                    historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("deptCode").getBytes()), StandardCharsets.UTF_8));
+                    historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("deptName").getBytes()), StandardCharsets.UTF_8));
                     historyAuth.setHistoryAuthType(HistoryAuthType.DEPT_REVISION);
                     responseWrapsodyDocumentDto.getAuths().add(historyAuth);
                 }
@@ -121,19 +121,19 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
         }
 
         if (!(deptViewList instanceof String)) {
-            deptViewList = json.getJSONObject("viewDeptAuthList").get("user");
+            deptViewList = json.getJSONObject("viewDeptAuthList").get("dept");
             if (deptViewList instanceof JSONObject) {
                 HistoryAuth historyAuth = new HistoryAuth();
-                historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) deptViewList).getString("userId").getBytes()), "UTF-8"));
-                historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) deptViewList).getString("userName").getBytes()), "UTF-8"));
+                historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) deptViewList).getString("deptCode").getBytes()), "UTF-8"));
+                historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) deptViewList).getString("deptName").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthType(HistoryAuthType.DEPT_READ);
                 responseWrapsodyDocumentDto.getAuths().add(historyAuth);
             } else {
                 List<Object> list = ((JSONArray) deptViewList).toList();
                 for (Object object : list) {
                     HistoryAuth historyAuth = new HistoryAuth();
-                    historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userId").getBytes()), "UTF-8"));
-                    historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("userName").getBytes()), "UTF-8"));
+                    historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((HashMap<String, String>) object).get("deptCode").getBytes()), "UTF-8"));
+                    historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((HashMap<String, String>) object).get("deptName").getBytes()), "UTF-8"));
                     historyAuth.setHistoryAuthType(HistoryAuthType.DEPT_READ);
                     responseWrapsodyDocumentDto.getAuths().add(historyAuth);
                 }
