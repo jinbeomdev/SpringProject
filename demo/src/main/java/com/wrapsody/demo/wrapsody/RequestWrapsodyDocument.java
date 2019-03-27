@@ -84,8 +84,8 @@ public class RequestWrapsodyDocument extends RequestWrapsody {
             depthAuthList = json.getJSONObject("checkoutDeptAuthList").get("dept");
             if(depthAuthList instanceof JSONObject) {
                 HistoryAuth historyAuth = new HistoryAuth();
-                historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) viewList).getString("deptCode").getBytes()), "UTF-8"));
-                historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) viewList).getString("deptName").getBytes()), "UTF-8"));
+                historyAuth.setHistoryAuthId(new String(Base64Utils.decode(((JSONObject) depthAuthList).getString("deptCode").getBytes()), "UTF-8"));
+                historyAuth.setHistoryAuthName(new String(Base64Utils.decode(((JSONObject) depthAuthList).getString("deptName").getBytes()), "UTF-8"));
                 historyAuth.setHistoryAuthType(HistoryAuthType.DEPT_REVISION);
                 responseWrapsodyDocumentDto.getAuths().add(historyAuth);
             } else {
